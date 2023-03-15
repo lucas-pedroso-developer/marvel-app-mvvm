@@ -25,6 +25,7 @@ class MainViewController: UIViewController {
     
     private func setObservers() {
         observer = mainViewModel.get(url: url)
+            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
