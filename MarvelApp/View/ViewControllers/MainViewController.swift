@@ -5,33 +5,52 @@
 //  Created by user on 04/03/23.
 //
 
+import Foundation
 import UIKit
+import Kingfisher
+import Combine
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    var observer: AnyCancellable?
     var mainViewModel = MainViewModel()
-    var disposeBag = DisposeBag()
+    let url = URL(string: "http://gateway.marvel.com/v1/public/characters?ts=1&apikey=c99a0bfa90957bf174792400a359a7dd&hash=da0e3c9ea128303172e7fe65eed2e63d")!
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setObservers()
+    }
+    
+    private func setObservers() {
+        observer = mainViewModel.getCom(url: url)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished:
+                    print("funcionou")
+                case .failure(let error):
+                    print("falhou")
+                }
+            }, receiveValue: { value in
+                self.reload()
+            })
+    }
+    
+    private func getChars() {
         self.getCharacters(url: URL(string: "http://gateway.marvel.com/v1/public/characters?ts=1&apikey=c99a0bfa90957bf174792400a359a7dd&hash=da0e3c9ea128303172e7fe65eed2e63d")!)
     }
-        
+    
+    @objc func reload() {
+        self.tableView.reloadData()
+    }
+    
+    @objc func showError() {
+        print("error")
+    }
     func getCharacters(url: URL) {
-//        self.mainViewModel.get(url: url).subscribe(
-//            onNext: { result in
-//                self.tableView.reloadData()
-//                //self.showLoading(false)
-//            },
-//            onError: { error in
-//                //self.showAlert(title: "Erro", message: "Ocorreu o seguinte erro - \(error.localizedDescription) ")
-//                
-//            },
-//            onCompleted: { }
-//        ).disposed(by: disposeBag)
+        self.mainViewModel.get(url: url)
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -65,10 +84,10 @@ class MainViewController: UIViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Detail", bundle: nil)
-        let newViewController = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
-        newViewController.id = self.mainViewModel.characters?.data?.results?[indexPath.row].id
-        present(newViewController, animated: true)
+//        let storyboard = UIStoryboard(name: "Detail", bundle: nil)
+//        let newViewController = storyboard.instantiateViewController(withIdentifier: "DetailViewController") as! DetailViewController
+//        newViewController.id = self.mainViewModel.characters?.data?.results?[indexPath.row].id
+//        present(newViewController, animated: true)
     }
         
     func dateConverter(date: String) -> String {

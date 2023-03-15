@@ -11,7 +11,7 @@
         <!--Marvel-->
         <scene sceneID="GxX-k5-J3q">
             <objects>
-                <viewController storyboardIdentifier="MainViewController" id="T33-db-tP4" customClass="MainViewController" customModule="View" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MainViewController" id="T33-db-tP4" customClass="MainViewController" customModule="MarvelApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="B0N-Av-vai">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -20,7 +20,7 @@
                                 <rect key="frame" x="20" y="97" width="374" height="758"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="102" id="iN4-Ww-4fF" customClass="CharacterCell" customModule="View" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="102" id="iN4-Ww-4fF" customClass="CharacterCell" customModule="MarvelApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="374" height="102"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="iN4-Ww-4fF" id="a2r-RV-PHV">
@@ -67,16 +67,16 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="characterimageView" destination="0oz-hy-dnf" id="Jsu-AB-jVB"/>
-                                            <outlet property="dateLabel" destination="t7O-Vk-xar" id="gVj-uI-zYR"/>
-                                            <outlet property="descriptionLabel" destination="a06-1V-T8e" id="XeY-LB-NzD"/>
-                                            <outlet property="nameLabel" destination="XiH-Gx-S3w" id="JJa-Wh-Oa3"/>
+                                            <outlet property="characterimageView" destination="0oz-hy-dnf" id="tLu-Za-WDm"/>
+                                            <outlet property="dateLabel" destination="t7O-Vk-xar" id="GZD-79-Jqj"/>
+                                            <outlet property="descriptionLabel" destination="a06-1V-T8e" id="9o9-aV-KoQ"/>
+                                            <outlet property="nameLabel" destination="XiH-Gx-S3w" id="Iax-iG-fk6"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="T33-db-tP4" id="ORt-Q1-U68"/>
-                                    <outlet property="delegate" destination="T33-db-tP4" id="PMv-Lo-avg"/>
+                                    <outlet property="dataSource" destination="T33-db-tP4" id="BXJ-6l-2Au"/>
+                                    <outlet property="delegate" destination="T33-db-tP4" id="aWb-1H-fN5"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -91,7 +91,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Marvel" id="u6G-Um-qjx"/>
                     <connections>
-                        <outlet property="tableView" destination="V35-g9-Gth" id="KJi-lN-Bkt"/>
+                        <outlet property="tableView" destination="V35-g9-Gth" id="U8v-cD-ChE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PVY-uL-KtJ" sceneMemberID="firstResponder"/>
