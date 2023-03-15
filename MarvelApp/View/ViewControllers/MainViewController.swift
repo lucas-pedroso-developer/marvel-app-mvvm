@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 import Combine
 
-class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MainViewController: UIViewController {
 
     var observer: AnyCancellable?
     var mainViewModel = MainViewModel()
@@ -24,7 +24,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     private func setObservers() {
-        observer = mainViewModel.getCom(url: url)
+        observer = mainViewModel.get(url: url)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .finished:
@@ -37,22 +37,24 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             })
     }
     
-    private func getChars() {
-        self.getCharacters(url: URL(string: "http://gateway.marvel.com/v1/public/characters?ts=1&apikey=c99a0bfa90957bf174792400a359a7dd&hash=da0e3c9ea128303172e7fe65eed2e63d")!)
-    }
-    
-    @objc func reload() {
+   @objc func reload() {
         self.tableView.reloadData()
     }
     
     @objc func showError() {
         print("error")
     }
-    func getCharacters(url: URL) {
-        self.mainViewModel.get(url: url)
-        
-    }
     
+    func dateConverter(date: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        let date = dateFormatter.date(from: date)!
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        return dateFormatter.string(from: date)
+    }
+}
+
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UIScreen.main.bounds.height*15/100
     }
@@ -89,15 +91,4 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
 //        newViewController.id = self.mainViewModel.characters?.data?.results?[indexPath.row].id
 //        present(newViewController, animated: true)
     }
-        
-    func dateConverter(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        let date = dateFormatter.date(from: date)!
-        dateFormatter.dateFormat = "dd/MM/yyyy"
-        return dateFormatter.string(from: date)
-    }
-
-
 }
-

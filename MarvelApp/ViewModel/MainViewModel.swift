@@ -40,7 +40,7 @@ public class MainViewModel {
         return nil
     }
     
-    public func getCom(url: URL) -> Future<Characters, Error> {
+    public func get(url: URL) -> Future<Characters, Error> {
         return Future { promixe in
             HttpService.shared.get(url: url) { result in
                 switch result {
@@ -62,79 +62,13 @@ public class MainViewModel {
                             promixe(.failure(error))
                         }
                     } else {
-                        //self.callErrorObserver()
-//                        let error = Error()
-//                        promixe(.failure(error))
+                        print("error")
+                        //promixe(.failure(<#Error#>))
                     }
                 case .failure(let error):
-                    //self.callErrorObserver()
                     promixe(.failure(error))
                 }
             }
         }
-        
-//        HttpService.shared.get(url: url) { result in
-//            switch result {
-//            case .success(let data):
-//                if data != nil {
-//                    do {
-//                        let results = try JSONDecoder().decode(Characters.self, from: data!)
-//                        print(results)
-//                        if self.characters == nil {
-//                            self.characters = results
-//                            self.callSuccessObserver()
-//                        } else {
-//                            self.characters?.data?.results!.append(contentsOf: (results.data?.results)!)
-//                            self.callSuccessObserver()
-//                        }
-//                    } catch(let error) {
-//                        self.callErrorObserver()
-//                    }
-//                } else {
-//                    self.callErrorObserver()
-//                }
-//            case .failure(let error):
-//                self.callErrorObserver()
-//            }
-//        }
-        
-        
-        
     }
-    
-    public func get(url: URL) {
-        HttpService.shared.get(url: url) { result in
-            switch result {
-            case .success(let data):
-                if data != nil {
-                    do {
-                        let results = try JSONDecoder().decode(Characters.self, from: data!)
-                        print(results)
-                        if self.characters == nil {
-                            self.characters = results
-                            self.callSuccessObserver()
-                        } else {
-                            self.characters?.data?.results!.append(contentsOf: (results.data?.results)!)
-                            self.callSuccessObserver()
-                        }
-                    } catch(let error) {
-                        self.callErrorObserver()
-                    }
-                } else {
-                    self.callErrorObserver()
-                }
-            case .failure(let error):
-                self.callErrorObserver()
-            }
-        }
-    }
-    
-    private func callSuccessObserver() {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "RefreshAction"), object: nil)
-    }
-    
-    private func callErrorObserver() {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "RefreshActionError"), object: nil)
-    }
-    
 }
