@@ -32,8 +32,8 @@ class MainViewController: UIViewController {
                 case .failure(let error):
                     print("falhou")
                 }
-            }, receiveValue: { value in
-                self.reload()
+            }, receiveValue: { [weak self] value in
+                self?.reload()
             })
     }
     
