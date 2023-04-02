@@ -10,27 +10,26 @@ import XCTest
 
 final class MarvelAppTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    private let urlString = "http://gateway.marvel.com/v1/public/characters?ts=1&apikey=c99a0bfa90957bf174792400a359a7dd&hash=da0e3c9ea128303172e7fe65eed2e63d"
+    private let spy = HttpServiceSpy()
+    private lazy var sut = MainViewModel(
+        service: spy
+    )
+    
+    func test_getMethodIsCalled() {
+        sut.get(url: URL(string: urlString)!)
+        XCTAssertTrue(spy.getIsCalled)
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+}
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+final class HttpServiceSpy: HttpGetProtocol {
+    var getIsCalled: Bool = false
+    var dataToReturn: Data?
+    func get(url: URL, completion: @escaping (Result<Data?, MarvelApp.HttpError>) -> Void) {
+        getIsCalled = true
+        completion(.success(dataToReturn))
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
+    
+    
 }

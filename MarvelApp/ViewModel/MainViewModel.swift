@@ -13,58 +13,49 @@ public class MainViewModel {
     public var resultsArray: [DataList]?
     public var characterToSearch: String = ""
     public var characters: Characters?
-    
-    public init() { }
+    private var service: HttpGetProtocol
+    //public init() { }
+    public init(service: HttpGetProtocol) {
+        self.service = service
+    }
     
     public func getCharacterId(indexPath: Int) -> Int {
-        if let id = self.characters?.data?.results![indexPath].id {
+        if let id = self.characters?.data?.results?[indexPath].id {
             return id
         }
         return 0
     }
     
     public func getCharacterName(indexPath: Int) -> String {
-        if let title = self.characters?.data?.results![indexPath].name {
+        if let title = self.characters?.data?.results?[indexPath].name {
             return title
         }
         return "No name"
     }
     
     public func getImage(indexPath: Int) -> URL? {
-        if let thumbnail = self.characters?.data?.results![indexPath].thumbnail {
-            print("\(thumbnail.path!)/portrait_xlarge.\(thumbnail.imageExtension!)")
-            if let url = URL(string:  "\(thumbnail.path!)/portrait_xlarge.\(thumbnail.imageExtension!)") {
-                return url
-            }
-        }
-        return nil
+        guard let thumbnail = self.characters?.data?.results?[indexPath].thumbnail else { return nil }
+        guard let path = thumbnail.path else { return nil }
+        guard let imageExtension = thumbnail.imageExtension else { return nil }
+        guard let url = URL(string:  "\(path)/portrait_xlarge.\(imageExtension)") else { return nil }
+        return url
     }
     
-    public func get(url: URL) -> Future<Characters, Error> {
+    public func get(url: URL) -> Future<Characters, HttpError> {
         return Future { promixe in
-            HttpService.shared.get(url: url) { result in
+            self.service.get(url: url) { result in
                 switch result {
                 case .success(let data):
-                    if data != nil {
+                    if let unwrapData = data {
                         do {
-                            let results = try JSONDecoder().decode(Characters.self, from: data!)
-                            if self.characters == nil {
-                                self.characters = results
-                                promixe(.success(self.characters!))
-                                //self.callSuccessObserver()
-                            } else {
-                                self.characters?.data?.results!.append(contentsOf: (results.data?.results)!)
-                                //self.callSuccessObserver()
-                                promixe(.success(self.characters!))
-                            }
-                        } catch(let error) {
-                            //self.callErrorObserver()
-                            promixe(.failure(error))
+                            let results = try JSONDecoder().decode(Characters.self, from: unwrapData)
+                            self.characters = results
+                            promixe(.success(results))
+                        } catch (_) {
+                            promixe(.failure(.unexpected))
                         }
-                    } else {
-                        print("error")
-                        //promixe(.failure(<#Error#>))
                     }
+                    promixe(.failure(.unexpected))
                 case .failure(let error):
                     promixe(.failure(error))
                 }

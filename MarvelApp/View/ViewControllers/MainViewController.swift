@@ -13,14 +13,19 @@ import Combine
 class MainViewController: UIViewController {
 
     var observer: AnyCancellable?
-    var mainViewModel = MainViewModel()
+    var mainViewModel = MainViewModel(service: HttpService())
     let url = URL(string: "http://gateway.marvel.com/v1/public/characters?ts=1&apikey=c99a0bfa90957bf174792400a359a7dd&hash=da0e3c9ea128303172e7fe65eed2e63d")!
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupViewModel()
         setObservers()
+    }
+    
+    private func setupViewModel() {
+        //self.mainViewModel = MainViewModel(service: HttpService())
     }
     
     private func setObservers() {
@@ -30,7 +35,7 @@ class MainViewController: UIViewController {
                 switch completion {
                 case .finished:
                     print("funcionou")
-                case .failure(let error):
+                case .failure(_):
                     print("falhou")
                 }
             }, receiveValue: { [weak self] value in
@@ -61,10 +66,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if self.mainViewModel.characters != nil {
-            return (self.mainViewModel.characters?.data?.results!.count)!
-        }
-        return 0
+        return self.mainViewModel.characters?.data?.results?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

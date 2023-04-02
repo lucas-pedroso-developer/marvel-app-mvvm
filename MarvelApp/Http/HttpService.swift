@@ -12,7 +12,7 @@ import Combine
 public class HttpService: HttpGetProtocol {
     
     private let session : Session
-    public static let shared = HttpService()
+    //public static let shared = HttpService()
     
     public init(session: Session = .default) {
         self.session = session
